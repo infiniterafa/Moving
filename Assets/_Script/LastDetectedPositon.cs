@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-/// <summary>
-/// Helps us make the code more efficient by not updating the 
-/// position if it is the same as previously
-/// </summary>
+
+/// Nos ayuda a hacer que el código sea más eficiente al no actualizar la
+/// posicion si es la misma que la anterior
+
 public class LastDetectedPositon
 {
     public Vector3Int? lastPosition;
@@ -13,8 +13,8 @@ public class LastDetectedPositon
     {
         if (lastPosition.HasValue)
             return lastPosition.Value;
-        throw new Exception("LastDetectedPositon position was never Updated. " +
-            "Check if you are calling TryUpdatingPositon on the instance of LastDetectedPosition scrip.");
+        throw new Exception("LastDetectedPositon position no fue actualizada. " +
+            "checa si estas llamando a  TryUpdatingPositon en la instancia del LastDetectedPosition script.");
     }
     public bool TryUpdatingPositon(Vector3Int tempPos)
     {

@@ -1,8 +1,8 @@
 using UnityEngine;
 
-/// <summary>
-/// Helper class that connects the Grid component and Grid shader and allows other scripts to access the data from the grid
-/// </summary>
+
+/// Clase auxiliar que conecta al componente grid y componente grid shader y permite que otros scripts puedan accesar a los datos de la grid 
+
 public class GridManager : MonoBehaviour
 {
     [SerializeField]
@@ -10,54 +10,53 @@ public class GridManager : MonoBehaviour
     [SerializeField]
     private Renderer gridRenderer;
 
-    //[SerializeField]
     private Vector3 gridCellSize;
     private Vector3 halfGridCellSize;
 
-    [SerializeField, Tooltip("How many cell should be shown on the grid plane. To make the cells larger or smaller change this. Min value is 0.")]
+    [SerializeField, Tooltip("Cuántas celdas deben mostrarse en el plano de la cuadrícula. Modifica este valor para aumentar o reducir el tamaño de las celdas. El valor mínimo es 0.")]
     private Vector2Int gridSizeInCells = new Vector2Int(10, 10);
 
-    // Public property that returns the grid size in cells
+    //  propiedad que regresa el tamaño de la grid en sus celdas
     public Vector2Int GridSize => gridSizeInCells;
 
     [SerializeField]
     private string cellSizeParameter = "_GridSize", gridDimensionsParameter = "_DefaultScale";
 
-    [SerializeField, Tooltip("Default Unity 3d Plane is made out of 10x10 quads. That is why default value is 10. Min value is 0.")]
-    private Vector2Int gridPlaneSize = new Vector2Int(10, 10); // previously defaultSize
+    [SerializeField, Tooltip("Default Unity 3d Plane esta hecho por 10x10 quads. Es por esto que el valor es 10 y el min es 0")]
+    private Vector2Int gridPlaneSize = new Vector2Int(10, 10); // previo defaultSize
 
     private void Start()
     {
         if (gridPlaneSize.x <= 0 || gridPlaneSize.y <= 0 || gridSizeInCells.x <= 0 || gridSizeInCells.y <= 0)
-            Debug.LogError("GridSizeInCells or GridPlaneSize has x or y <= 0 which is not allowed.");
+            Debug.LogError("GridSizeInCells o GridPlaneSize tiene x o y <= 0 lo cual no esta permitido");
 
-        // Calculate cell size based on plane size and desired number of cells
+        // Calcula el tamaño de la celda en función del tamaño del plano y del número de celdas deseado
         gridCellSize = new Vector3(
             gridPlaneSize.x / (float)gridSizeInCells.x,
-            0.5f, // Default Y value for cell height since right now this only works for 2D grid
+            0.5f, // Valor default Y para la altura de la celda,esto solo funciona para una cuadrícula 2D
             gridPlaneSize.y / (float)gridSizeInCells.y
         );
 
         grid.cellSize = gridCellSize;
         halfGridCellSize = gridCellSize / 2f;
 
-        // Update shader parameters
+        
         UpdateShaderParameters();
     }
     private void UpdateShaderParameters()
     {
-        // Pass the cell size to the shader(for drawing grid lines)
-            gridRenderer.material.SetVector(cellSizeParameter, new Vector2(1f / gridCellSize.x, 1f / gridCellSize.z));
+        // Pasa el tamaño de celda al shader (para dibujar las líneas de la cuadrícula)
+        gridRenderer.material.SetVector(cellSizeParameter, new Vector2(1f / gridCellSize.x, 1f / gridCellSize.z));
 
-        // Pass the grid plane size to the shader (this should equal gridPlaneSize)
+        // Pasa el tamaño del grid plane al shader (debería ser igual al gridPlaneSize)
         gridRenderer.material.SetVector(gridDimensionsParameter, new Vector2(gridPlaneSize.x, gridPlaneSize.y));
 
     }
 
     public Vector3Int GetCellPosition(Vector3 worldPosition, PlacementType placementType)
     {
-        // Offset the world position to account for centered plane
-        // The plane goes from -5 to 5, but grid cells start at 0,0
+        // Offset del world position al centro del plano
+        // El plano va de -5 to 5, pero las celdas de la grid empiezan en 0,0
         worldPosition.x += gridPlaneSize.x / 2f;
         worldPosition.z += gridPlaneSize.y / 2f;
 
@@ -69,7 +68,7 @@ public class GridManager : MonoBehaviour
     public Vector3 GetWorldPosition(Vector3Int cellPosition)
     {
         Vector3 worldPos = grid.CellToWorld(cellPosition);
-        // Offset back to centered coordinates
+        // Offset de regreso al centro de las coordenadas
         worldPos.x -= gridPlaneSize.x / 2f;
         worldPos.z -= gridPlaneSize.y / 2f;
         return worldPos;
@@ -86,10 +85,7 @@ public class GridManager : MonoBehaviour
     }
 }
 
-/// <summary>
-/// Placement types. A better idea would be to try to create objects from it ex using ScriptableObjects.
-/// Still enum works well for a prototype.
-/// </summary>
+
 public enum PlacementType
 {
     None,
@@ -100,11 +96,12 @@ public enum PlacementType
     FreePlacedObject
 }
 
-/// <summary>
-/// Because of the limitation of using enum the end result is that you need extensions methods
-/// since you can't easily add more data to an enum. This way I can reliably access the additional data
-/// without having to check each if / switch statement where I have used the enum.
-/// </summary>
+
+/// Debido a las limitaciones de los *enums*, el resultado es que se requieren métodos de extensión, ya que no es sencillo añadir más datos a un *enum*.
+/// De esta forma, puedo acceder a la información adicional de manera fiable sin tener que revisar
+/// cada sentencia `if` o `switch` donde haya utilizado dicho *enum*.
+
+
 public static class PlacementTypeExtensions
 {
     public static bool IsEdgePlacement(this PlacementType placementType)

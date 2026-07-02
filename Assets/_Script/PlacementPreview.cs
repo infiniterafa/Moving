@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Allows us to show the preview for the objects that we are planning to place.
-/// Shows transparent objects and tint them red in case the placement is forbidden
-/// </summary>
+
+/// Permite mostrar la preview de los objetos que se planea colocar.
+/// Muestra los objetos de forma semitransparente y los tiñe de rojo si la colocación no está permitida.
+
 public class PlacementPreview : MonoBehaviour
 {
     [SerializeField]
@@ -32,9 +32,9 @@ public class PlacementPreview : MonoBehaviour
         transparentMaterialInstance = new Material(transparentMaterial);
     }
 
-    /// <summary>
-    /// Updates the preview prefabs positions
-    /// </summary>
+
+    /// Actualiza las posiciones de los prefabs de vista previa.
+
     /// <param name="positions"></param>
     /// <param name="rotation"></param>
     public void MovePreview(List<Vector3> positions, List<Quaternion> rotation)
@@ -65,9 +65,8 @@ public class PlacementPreview : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// Disables preview objects
-    /// </summary>
+    /// Desactiva los preview objects
+
     public void StopShowingPreview()
     {
         previewObjectRenderer = null;
@@ -82,9 +81,9 @@ public class PlacementPreview : MonoBehaviour
         previewObjects.Clear();
     }
 
-    /// <summary>
-    /// Starts showing preview objects.
-    /// </summary>
+
+    /// Visualiza los preview objects.
+ 
     /// <param name="placedObject"></param>
     /// <param name="keepMaterial">For removing objects state we change the preview to a red transparent square and set this to True</param>
     public void StartShowingPreview(GameObject placedObject, bool keepMaterial = false)
@@ -102,9 +101,9 @@ public class PlacementPreview : MonoBehaviour
         previewObjects.Add(previewTemplate);
     }
 
-    /// <summary>
-    /// Creates a preview object out of the objects prefab and swaps its material to a transparent one
-    /// </summary>
+
+    /// Crea un preview object a partir del prefab del objeto y cambia su material por uno transparente.
+
     /// <param name="placedObject"></param>
     /// <returns></returns>
     private GameObject CreatePreviewObject(GameObject placedObject)
@@ -122,10 +121,10 @@ public class PlacementPreview : MonoBehaviour
         return preview;
     }
 
-    /// <summary>
-    /// Assigns a transparent material to a preview objects
-    /// so that we can make it any color we wante (white and red in this case)
-    /// </summary>
+
+    /// Asigna un material transparente a los objetos de previsualización
+    /// para que podamos darles el color que queramos (blanco y rojo en este caso)
+
     /// <param name="renderer"></param>
     private void PreparePreviewPrefab(Renderer renderer)
     {
@@ -138,9 +137,9 @@ public class PlacementPreview : MonoBehaviour
         previewObjectRenderer.materials = newMaterialArray;
     }
 
-    /// <summary>
-    /// Switches the white (correct placement) preview material feedback to red (not allowed placement feedback)
-    /// </summary>
+
+    /// Cambia el material del preview a blanco (correcto) a rojo (equivocando)
+
     /// <param name="val"></param>
     public void ShowPlacementFeedback(bool val)
     {

@@ -67,23 +67,24 @@ public static class PlacementValidator
     internal static bool CheckIfPositionsAreNearWall(List<Vector3Int> selectedPositions, PlacementGridData placementData, Vector2Int objectSize, List<Quaternion> selectedPositionsRotation, bool edgePlacement)
     {
         int rotationEulerY = Mathf.RoundToInt(selectedPositionsRotation[0].eulerAngles.y);
-        //Check if there are no walls where we want to place the object
+        //Comprobar si no hay paredes donde queremos colocar el objeto
+        
         HashSet<Edge> edges = new();
         foreach (Vector3Int pos in selectedPositions)
         {
-            //It realy doesnt matter that we are using "wall placement data" to select those. Those are the same for any PlacementGridData as
-            //those are calculated
+            //Los valores son los mismos para cualquier PlacementGridData
+
             List<Vector3Int> cellsToOccupy = placementData.GetCellPositions(pos, objectSize, rotationEulerY);
             foreach (var cellPosition in cellsToOccupy)
             {
-                //Algorithm that gets all the edges that the placed object crosses (possible walls)
+                //Algoritmo que obtiene todas las aristas que atraviesa el objeto colocado (posibles muros).
                 Vector3Int offset = cellPosition - pos;
                 if (rotationEulerY == 0)
                 {
-                    //We need to check if the edge is valid
+                    //Checar si es valido
                     if (offset.z == objectSize.y - 1 && placementData.IsCellAt(cellPosition + Vector3Int.forward))
                     {
-                        //we need the edge for the above cell
+                        //Necesitamos el borde para la celda de arriba.
                         edges.UnionWith(placementData.GetEdgePositions(cellPosition + Vector3Int.forward, Vector2Int.one, 0));
                     }
                 }
@@ -110,8 +111,8 @@ public static class PlacementValidator
                 }
             }
         }
-        //Should check if the wall is near all the edges of the object (edge is dependand on the rotation
-        // but by default with 0 rotation it is the top / forward direction)
+        // Se debería comprobar si la pared está cerca de todos los bordes del objeto (el borde depende de la rotación,
+        // pero por defecto, con rotación 0, corresponde a la dirección superior o frontal).
         foreach (var edgePos in edges)
         {
             if (placementData.IsEdgeObjectAt(edgePos) == false)

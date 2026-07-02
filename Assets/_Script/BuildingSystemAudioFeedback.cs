@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Audio feedback system for the Placement Manager
-/// </summary>
+
+/// Audio feedback para el placement system
+
 public class BuildingSystemAudioFeedback : MonoBehaviour
 {
     [SerializeField] 

@@ -101,10 +101,9 @@ public class PlacementManager : MonoBehaviour
 
 
 
- 
-    /// Created anf invokes a Command responsible for placing objects and undoing placement
-    /// </summary>
-    /// <param name="selectionResult"></param>
+
+    /// Crea e invoca un comando responsable de colocar objetos y deshacer dicha colocación.
+
     private void TryPlacingObjects(SelectionResult selectionResult)
     {
 
@@ -153,9 +152,9 @@ public class PlacementManager : MonoBehaviour
 
     }
 
-    /// <summary>
-    /// Creates a command responsible for removing objects
-    /// </summary>
+    /// 
+    /// Crea el comando responsable de eliminar objetos
+
     /// <param name="selectionResult"></param>
     public void TryRemovingObject(SelectionResult selectionResult)
     {
@@ -171,24 +170,24 @@ public class PlacementManager : MonoBehaviour
         OnRemoveObject?.Invoke();
     }
 
-    /// <summary>
-    /// Moves preview of the placed objects
-    /// </summary>
+   
+    /// Mueve la preview de los objetos
+
     /// <param name="selectionResult"></param>
     private void MovePreview(SelectionResult selectionResult)
     {
         placementPrevew.MovePreview(selectionResult.selectedPreviewPositions, selectionResult.selectedPositionsObjectRotation);
 
-        //In remove mode always show the preview as red
+        //En el modo de remover la preview se mostrara roja
         if (buildingState is RemovingState)
             placementPrevew.ShowPlacementFeedback(false);
         else
             placementPrevew.ShowPlacementFeedback(selectionResult.placementValidity);
     }
 
-    /// <summary>
-    /// Calls Undo operation on the available Command
-    /// </summary>
+
+    /// Llama al Undo operation en el comando disponible
+
     public void TryUndoLastPlacement()
     {
         if (commandManager.Undo() == false)
@@ -199,9 +198,9 @@ public class PlacementManager : MonoBehaviour
             OnToggleUndo?.Invoke(false);
     }
 
-    /// <summary>
-    /// Stops building state and disconnects it from the input system
-    /// </summary>
+
+    /// Detiene el building state y lo desconecta del input system
+
     public void CancelState()
     {
         if (buildingState == null)
@@ -219,17 +218,16 @@ public class PlacementManager : MonoBehaviour
         gridManager.ToggleGrid(false);
     }
 
-    /// <summary>
-    /// Triggers the Removing State based on the current state that we are in.
-    /// Ex if we are placing walls it will trigger RemoveWalls functionality
-    /// </summary>
+    /// Activa el removing state en función del estado actual.
+    ///  ejemplo, si estamos colocando muros, se activará la funcionalidad RemoveWalls.
+
     /// <param name="val"></param>
     private void HandleDeleteAction(bool val)
     {
         if (buildingState == null)
             return;
         removeStateFrame.SetActive(val);
-        //Save rotation between Removing and Placement states
+        //Salva la rotacion entre Removing y el Placement states
         Quaternion previousRotation = buildingState.SelectionData.Rotation;
         if (movement)
             m_wasInMovementState = true;
@@ -265,11 +263,9 @@ public class PlacementManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Allows to place objects on the map as well as to save them in our Grid Data object
-    /// *Because of the SaveSystem I had to add the "bool animatePlacement = true"
-    /// to stop animations when we load the data
-    /// </summary>
+
+    /// Permite colocar objetos en el mapa, así como guardarlos en nuestro objeto Grid Data.
+
     /// <param name="selectionResult"></param>
     /// <param name="placementData"></param>
     /// <param name="itemData"></param>
@@ -299,22 +295,19 @@ public class PlacementManager : MonoBehaviour
         return gridData.GetSaveData();
     }
 
-    /// <summary>
-    /// Extra method for use by the Save system. It allws us to get the "CurrentPlacementData"
-    /// without having to expose it to SaveManager
-    /// We also calculate here the "VEctor3" placement positions from GridPositions
-    /// loaded from our SaveData
-    /// </summary>
+
+    /// Método adicional para uso del sistema de guardado. Nos permite obtener el "CurrentPlacementData" sin exponer al SaveManager
+    ///Tambien se calcula el "vector3" placement positions para las GridPositions de la SaveData
+
     /// <param name="selectionResult"></param>
     /// <param name="itemData"></param>
     public void PlaceStructureAt(SelectionResult selectionResult, ItemData itemData)
     {
-        //We needt he building state to select the correct "CurrentPlacementData"
+    
         buildingState = new PlacingObjectsState(gridManager, gridData, itemData);
-        //We need to convert saved GridPositons to Vector3 placement positions
+ 
         List<Vector3> selectedPosition = selectionResult.selectedGridPositions.Select(x => gridManager.GetWorldPosition(x)).ToList();
-        ///Because of the additinal calculation we have to recreate this struct since
-        ///structs are immutable
+   
         SelectionResult modifiedResuls = new()
         {
             selectedPositions = selectedPosition,
@@ -322,15 +315,15 @@ public class PlacementManager : MonoBehaviour
             selectedPositionsObjectRotation = selectionResult.selectedPositionsObjectRotation,
             selectedPositionGridCheckRotation = selectionResult.selectedPositionGridCheckRotation
         };
-        //We will reuse the original PlaceStructureAt method
+       
         PlaceStructureAt(modifiedResuls, buildingState.CurrentPlacementData, itemData, false);
-        //We need to cancel placement or we will see the preview and grid layout showing up
+
         CancelState();
     }
 
-    /// <summary>
-    /// Removes a structre at a specific positions
-    /// </summary>
+
+    /// Elimina una estructura en una posición específica.
+
     /// <param name="selectionResult"></param>
     /// <param name="placementData"></param>
     public void RemoveStructureAt(SelectionResult selectionResult, PlacementGridData placementData)
@@ -361,10 +354,10 @@ public class PlacementManager : MonoBehaviour
         OnToggleUndo?.Invoke(true);
     }
 
-    /// <summary>
-    /// Selects the first position that we will use as selection.
-    /// Ex for BoxSelection it will be its starting point
-    /// </summary>
+
+    /// Selecciona la primera posición que se utilizará como selección.
+    /// Por ejemplo, con  BoxSelection será su punto de inicio.
+
     /// <exception cref="Exception"></exception>
     private void HandleSelectionStarted()
     {
@@ -375,15 +368,13 @@ public class PlacementManager : MonoBehaviour
         buildingState.HandleSelectionStarted(input.GetSelectedMapPosition());
     }
 
-    /// <summary>
-    /// Processes the selected positions when we let go of our mouse button
-    /// </summary>
+    /// Procesa las posiciones seleccionadas al soltar el botón del ratón.
+
     private void HandleSelectionFinished()
     {
         if (buildingState == null)
             return;
-        //Clear selection when we let go of the mouse button while over UI element
-        //Prevents selection from changing while we are not pressing the mouse button (because of UI)
+      
         if (input.IsInteractingWithUI())
         {
             buildingState.SelectionData.Clear();
@@ -402,10 +393,7 @@ public class PlacementManager : MonoBehaviour
         buildingState.HandleSelectionChanged(input.GetSelectedMapPosition());
     }
 
-    // I don't like using Regions as the obscrure the readibility but the movement logic connects Removing and Placement state
-    // so with the current implementation there was no way to include it inside the State pattern that is implemented right now.
-    // It is part of the code that could be improved by refactoring the State pattern implementation (abstract BuildingState) 
-    // to be even more high level. This also could be a separate class
+
     #region Move Objects Functionality
 
     private bool movement = false;

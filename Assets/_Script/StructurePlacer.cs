@@ -4,9 +4,9 @@ using Unity.Mathematics;
 using UnityEngine;
 using DG.Tweening;
 
-/// <summary>
-/// Object responsible for placing GameObjects on the map and storing references to it.
-/// </summary>
+
+/// Script y objeto responsable de colocar GameObjects en el mapa y almacenar referencias a ellos.
+
 public class StructurePlacer : MonoBehaviour
 {
     [SerializeField]
@@ -34,10 +34,10 @@ public class StructurePlacer : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// When we place a structure on the map we return its index (index from a list of GO above)
-    /// so that if we need ro remove it we use the index as a reference to remove the correct GO
-    /// </summary>
+
+    /// Cuando colocamos una estructura en el mapa, devolvemos su index (index de la lista de GO anterior)
+    /// para que, si necesitamos eliminarla, usemos el index como referencia para eliminar el GO correcto.
+
     /// <param name="objectToPlace"></param>
     /// <param name="position"></param>
     /// <param name="rotation"></param>
@@ -67,7 +67,6 @@ public class StructurePlacer : MonoBehaviour
         GameObject newObject = placedObjects[index];
         newObject.transform.DOKill();
         newObject.transform.DOScaleY(0, destroyDelay).OnComplete(()=> Destroy(newObject));
-        //Destroy(newObject);
         placedObjects[index] = null;
 
     }
@@ -76,9 +75,9 @@ public class StructurePlacer : MonoBehaviour
     {
         foreach (GameObject obj in placedObjects) 
         {
-            //Instead of removing NULL from our list we populate it with new structures
-            //That is why we need to test here if it is null or not
-            if(obj != null)
+            //En lugar de eliminar los valores NULL de nuestra lista, la poblamos con nuevas estructuras.
+
+            if (obj != null)
                 obj.transform.DOComplete();
         }
     }

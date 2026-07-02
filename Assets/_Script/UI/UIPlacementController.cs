@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-/// <summary>
-/// Controller to separate the UI elements (buttons) from directly being called by the Placement system (any system)
-/// This allows us to reuse the ui without having to import the PlacementManager and all it depends on
-/// The downside is that it communicates using events so it is harder to debug the connections
-/// </summary>
+
+
+/// Controlador para evitar que el placement system(cualquiera que sea) llame directamente a los elementos de la interfaz de usuario (botones).
+/// Reutiliza la interfaz sin tener que importar el PlacementManager ni todas sus dependencias.
+
 public class UIPlacementController : MonoBehaviour
 {
     public UnityEvent<int> OnObjectSelected;

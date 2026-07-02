@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// The actual logic that modifies the button color and size to provide feedback
-/// </summary>
+
+
+/// La lógica que modifica el color del botón y el tamaño que nos da el feedback de la usabilidad
+
 public class ButtonHighlightController : MonoBehaviour
 {
     [SerializeField]

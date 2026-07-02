@@ -5,10 +5,9 @@ using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-/// <summary>
-/// Input manager. We could ponentialy split the Raycast functionality outside of it and add the camera input ehre
-/// to make it more universal and preserve Single Responsibility Rule better
-/// </summary>
+
+/// Input manager
+
 public class InputManager : MonoBehaviour
 {
     [SerializeField]

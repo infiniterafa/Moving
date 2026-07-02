@@ -6,9 +6,10 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System;
 
-/// <summary>
-/// Changes the button color when we click it, enter and exit it
-/// </summary>
+
+
+/// Cambia el color del boton cuando se da click
+
 public class ButtonFeedback : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     [SerializeField]
@@ -44,7 +45,7 @@ public class ButtonFeedback : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         selected = false;
         button.image.color = defaultColor;
         button.transform.localScale = Vector3.one;
-        //button.image.DOColor(defaultColor, fadeDuration);
+       
     }
 
     public void OnPointerEnter(PointerEventData eventData)

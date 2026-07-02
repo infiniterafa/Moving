@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
 
-/// <summary>
-/// High level method that connects the data "Selection Data" to a selection strategyu
-/// while keeping the strategies disconnected from the PlacementManager
-/// </summary>
+
+/// Método de alto nivel que conecta los datos de selección ("Selection Data") con una selectionstrategy,
+/// manteniendo al mismo tiempo las otras estrategias desconectadas del PlacementManager.
+
 public class PlacementSelector
 {
     SelectionData selectionData;
@@ -20,14 +20,14 @@ public class PlacementSelector
 
     }
 
-    /// <summary>
-    /// Sends selection started message to a Selection Strategy
-    /// also clearing the old selection data
-    /// </summary>
+
+    /// Envía un mensaje de inicio a SelectionStrategy ,
+    ///   borrando también los datos de selección anteriores.
+     
     /// <param name="mousePosition"></param>
     public void HandleSelectionStarted(Vector3 mousePosition)
     {
-        //This might be duplocated in the selection strategies
+       
         selectionData.Clear();
         selectionStrategy.StartSelection(mousePosition, selectionData);
         SelectionResult data = selectionData.GetData();
@@ -35,28 +35,28 @@ public class PlacementSelector
             OnSelectionChanged?.Invoke(data);
     }
 
-    /// <summary>
-    /// Ensures that the finished selection data is sent to other classes (PlacementManager)
-    /// Also Resets the old selecton data
-    /// </summary>
+
+    /// Asegura que los datos de selección finales se envíen a otras clases (PlacementManager).
+    ///  restablece los datos de selección anteriores.
+
     public void HandleSelectionFinished()
     {
         SelectionResult data = selectionData.GetData();
-        //Wall placement doesn't put anything in the gridpositions list.
-        //This prevents from creating the placement process if the placement data is not correct
+        //Wall placement no coloca nada en la gridpositions list.
+        // evita que se cree el proceso de placement si sus datos no son correctos.
         if (data.selectedGridPositions.Count > 0)
             OnSelectionFinished?.Invoke(data);
         ResetSelection();
     }
 
-    /// <summary>
-    /// Sends movement information to the Selecton Strategy while
-    /// also updating the PlacementManager about the results
-    /// </summary>
+
+    /// Envía información de movimiento a la SelectonStrategy, al mismo tiempo que
+    /// actualiza al PlacementManager sobre los resultados.
+
     /// <param name="mousePosition"></param>
     public void HandleMouseMovement(Vector3 mousePosition)
     {
-        //If we havent modified the selection don't send any updates to other classes
+        //Si no hemos modificado la selección, no enviamos ninguna actualización a otras clases.
         if (selectionStrategy.ModifySelection(mousePosition, selectionData))
         {
             SelectionResult data = selectionData.GetData();
@@ -65,7 +65,7 @@ public class PlacementSelector
 
     }
 
-    //Handlse the rotation (when player click , or . buttons)
+    //Maneja la rotación cuando el player clickea , o .
     public void HandleRotation(Quaternion rotationAmount)
     {
         selectionData.Rotation *= rotationAmount;
@@ -74,9 +74,9 @@ public class PlacementSelector
         Debug.Log(selectionData.Rotation.eulerAngles);
     }
 
-    /// <summary>
-    /// Allows to refresh the selection in case the placement became valid / invalid
-    /// </summary>
+
+    /// Permite actualizar la selección en caso de que la ubicación haya pasado a ser válida o inválida.
+
     internal void Refresh()
     {
         if (selectionData.GetSelectedGridPositions().Count <= 0)
@@ -85,9 +85,9 @@ public class PlacementSelector
         OnSelectionChanged?.Invoke(selectionData.GetData());
     }
 
-    /// <summary>
-    /// Clears the selection and informas the strategy to finish
-    /// </summary>
+
+    /// Borra la selección e informa a la estrategia de que finalice.
+
     public void ResetSelection()
     {
         selectionData.Clear();

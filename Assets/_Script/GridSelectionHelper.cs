@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-/// <summary>
-/// Helper methods for A* algorithm and other algorithm that needs to find / check data present in our GridData structure
-/// </summary>
+
+/// Helper methods para el algoritmo A* y otros algoritmos que necesiten buscar o verificar datos presentes en nuestra estructura GridData.
 public static class GridSelectionHelper
 {
     public static IEnumerable<int> MoveMinToMaxInclusive(int minVal, int maxVal, int step)
@@ -24,7 +23,7 @@ public static class GridSelectionHelper
         }
     }
 
-    //I am assuming that object that recquires A* is of size 1x1
+    //Se asume que el objeto requiere A* y tiene tamaño de 1x1
     public static List<Vector3Int> AStar(Vector3Int startPos, Vector3Int endPos, PlacementGridData placementData)
     {
         List<Vector3Int> path = new();
@@ -46,12 +45,12 @@ public static class GridSelectionHelper
             currentPosition = openList[0];
             openList.RemoveAt(0);
 
-            //Do when we reach the end
+            //hazlo cuando llegue al final
             if(currentPosition == endPos)
             {
                 //get patern
                 //currentPosition = childParentDictionary[currentPosition];
-                //path.Add(endPos);
+             
                 while (currentPosition != startPos)
                 {
                     path.Add(currentPosition);
@@ -62,7 +61,7 @@ public static class GridSelectionHelper
                 break;
             }
 
-            //Do if we need to still search
+            //Ejecutalo si todavía se necesita buscar.
             List<Vector3Int> neighbours = FindNeighbours(currentPosition, placementData);
             foreach (var neighbourposition in neighbours)
             {
